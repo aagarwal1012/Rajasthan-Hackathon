@@ -296,7 +296,7 @@
 								<td class="w-2">${item.email}</td>
 								<td class="w-2">
 									<div class="input-group date" id="datetimepicker1">
-					                    <input type='text' id="datepicker" class="form-control date-${item.uid}" />
+					                    <input type='text' class="datepicker" class="form-control" id="date1-${item.uid}" />
 					                </div>
 								</td>
 								<td class="w-1">
@@ -306,13 +306,14 @@
 								</td>
 							</tr>
 						`);
-				        $('#datepicker').datepicker({
+				        $(`#date1-${item.uid}`).datepicker({
 				        	format: 'dd-mm-yyyy',
 				            uiLibrary: 'bootstrap4'
 				        });
 		        		$(`#${item.uid}`).click(function(ev){
 		        			// alert(`${item.uid}`);
-							var date_picked = $(`.date-${item.uid}`).val();
+		        			ev.preventDefault();
+							var date_picked = $(`#date1-${item.uid}`).val();
 							var url_request_doctors = "http://178.128.111.216:1807/api/request?euid="+euid+"&doctor="+`${item.uid}`+"&date="+date_picked;
 							// alert(url_request_doctors);
 							$.ajax({
