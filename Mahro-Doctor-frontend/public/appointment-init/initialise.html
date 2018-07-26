@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mahro Doctor</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>	
+	<link rel="stylesheet" type="text/css" href="../static/css/common.css">
+</head>
+<body>
+	<div class="body flex-disp h-0" style="background-color: #ffffff">
+ 		<div class="container-small" style="margin: 14rem;">
+ 			<div class="row">
+ 				<div class="col-lg-12 col-md-12 align-self-start flex-disp">
+ 					<div class="card-title">
+ 						<h3>
+ 							<img src="../static/images/logo.ico" style="width: 12rem; height: 4rem;">
+ 						</h3>
+ 					</div>
+					<div class="card">
+						<div class="card-body p-6" id="init-block" style="padding: 2rem; background-color: #f8f8f8">
+							<h3 class="card-title" style="margin-bottom: 1.5rem;">
+								Initialise Appointment:
+							</h3>
+							<form name="init">
+								<div class="form-group">
+									<label class="form-label">
+										Patient Id:
+									</label>
+									<input class="form-control" type="text" name="puid" placeholder="Patient Id" id="puid">
+								</div>
+								<div class="form-group">
+									<label class="form-label">
+										Doctor Id:
+									</label>
+									<input class="form-control" type="text" name="duid" placeholder="Doctor Id" id="duid">
+								</div>
+							</form>
+							<button class="btn btn-primary form-footer w-100" id="get-appointment">Get Appointment</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$("form").submit(function(e){
+			e.preventDefault();
+		});
+		function getJsonFromUrl() {
+			let query = location.search.substr(1);
+			let result = {};
+			query.split("&").forEach(function(part) {
+				let item = part.split("=");
+				result[item[0]] = decodeURIComponent(item[1]);
+			});
+			return result;
+		}
+		let q = getJsonFromUrl();
+		console.log(q.duid);
+		if(q.duid != undefined && q.duid != "")
+		{
+			$("#duid").attr("value", q.duid);
+			$("#duid").attr("disabled", true);
+		}
+		if(q.puid != undefined && q.puid != "")
+		{
+			$("#puid").attr("value", q.puid);
+			$("#puid").attr("disabled", true);
+		}
+		$("#get-appointment").click(function() {
+			if($("#warning").length != 0)
+				$("#warning").remove();
+			let puid = "";
+			let duid = "";
+			let dd = $("#duid").attr("disabled");
+			let dp = $("#puid").attr("disabled");
+			$("#puid").attr("disabled", false);
+			$("#duid").attr("disabled", false);
+			let array = $('form[name="init"]').serializeArray();
+			if(dp)
+				$("#puid").attr("disabled", true);
+			if(dd)
+				$("#duid").attr("disabled", true);
+			console.log(array);
+			array.forEach(function(item) {
+				if(item.name == "puid")
+					puid = item.value;
+				if(item.name == "duid")
+					duid = item.value;
+			})
+			let URL = 'http://178.128.111.216:1807/api/initialise';
+			URL += `?patient=${puid}&doctor=${duid}`;
+			console.log(URL);
+			$.ajax({
+				type: 'GET',
+				url: URL,
+				success: function(res) {
+					if(res.status == "ok") {
+						let id = res.appointment_id;
+						window.location.href = `../doctor/appointmentform.html?id=${id}`;
+					}
+					else
+						$("#init-block").append(`
+								<div class="form-group">
+									<label class="form-label red" id="warning">
+										${res.message}
+									</label>
+								</div>
+								`);
+				}, 
+				error: function(e) {
+					console.log(e);
+				}
+			});
+		});
+	</script>
+</body>
+</html>

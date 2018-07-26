@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mahro Doctor</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>	
+	<link rel="stylesheet" type="text/css" href="../static/css/common.css">
+</head>
+<body>
+	<div class="header">
+		<div class="container">
+			<div class="row">
+				<div class="flex-disp col-lg-10" style="align-items: flex-start;">
+					<a class="header-brand" href="./index.html">
+						<img src="../static/images/logo.ico" alt="logo" style="width: 12rem; height: 4rem;">
+					</a>
+				</div>
+				<div class="logout col-lg-2 flex-disp">
+					<input type="submit" class="btn btn-dark ml-auto request-appointment" value="Logout" />
+				</div>
+			</div>			
+		</div>
+	</div>
+	<div class="body">
+ 		<div class="container">
+ 			<div class="row">
+ 				<div class="col-lg-6 col-md-12 col-sm-12">
+ 					<div class="card">
+ 						<div class="card-body p-3 flex-disp c-align">
+ 							<div class="h1" id="doctor-name"></div>
+ 							<div class="mb-1 text-muted">Doctor</div>
+ 						</div>
+ 					</div>
+				</div>
+				<div class="col-lg-3 col-md-6 col-md-6">
+					<div class="card">
+ 						<div class="card-body p-3 flex-disp c-align">
+ 							<div class="h1" id="new-app-cnt"></div>
+ 							<div class="mb-1 text-muted">New Appointments</div>
+ 						</div>
+ 					</div>
+				</div>
+				<div class="col-lg-3 col-md-6 col-md-6">
+					<div class="card">
+ 						<div class="card-body p-3 flex-disp c-align">
+ 							<div class="h1" id="comp-app-cnt"></div>
+ 							<div class="mb-1 text-muted">Completed Appointments</div>
+ 						</div>
+ 					</div>
+				</div>
+ 			</div>
+ 			<div class="row">
+	 			<div class="col-lg-6 col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<h3 class="card-title">Completed Appointments</h3>
+						</div>
+						<div class="card-body o-auto appointments">
+							<table class="w-100">
+								<thead>
+									<tr>
+										<th class="w-1">Appointment Id</th>
+										<th class="w-2">Patient Name</th>
+										<th>Date</th>
+									</tr>
+								</thead>
+								<tbody id="comp-app">
+		                    	</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 col-lg-6">
+					<div class="card">
+						<div class="card-header">
+							<h3 class="card-title">New Appointments</h3>
+							<button id="create-appt" class="btn btn-primary" style="margin-left: auto;"><a id="href"><span><img src="../static/images/plus.ico"></span></a></button>
+						</div>
+						<div class="card-body o-auto appointments">
+							<table class="w-100">
+								<thead>
+									<tr>
+										<th class="w-1">Appointment Id</th>
+										<th class="w-2">Patient Name</th>
+										<th>Date</th>
+									</tr>
+								</thead>
+								<tbody id="new-app">
+		                    	</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+ 			</div>
+ 			<div class="row">
+	 			<div class="col-lg-12">
+					<div class="card">
+						<div class="card-header"> <!-- api/get_user_pending_requests - euid -->
+							<h3 class="card-title">Pending Requests:</h3>
+						</div>
+						<div class="card-body o-auto appointments" id="pen-req">
+							<div class="w-100 flex-disp-row-1 t-head border-ub">
+								<div class="w-1-1 inline">
+									Request Id
+								</div>
+								<div class="w-2-1 inline">
+									Patient Name
+								</div>
+								<div class="w-a inline">
+									Date
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+ 			</div>
+ 		</div>
+	</div>
+	<div class="footer">
+		<div class="container">
+			Made By: Team-Linters
+		</div>
+	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.0/js.cookie.min.js"></script>
+	<script type="text/javascript" src="../static/js/logout.js"></script>
+	<script type="text/javascript">
+		let euid = Cookies.get('euid');
+		let uid = Cookies.get('uid');
+		let URL = `http://178.128.111.216:1807/api/get_doctor_appointments?euid=${euid}`;
+		let appointments = [];
+		function getMonth(month) {
+			switch (month) {
+				case "Jan" : return "01";
+				case "Feb" : return "02";
+				case "Mar" : return "03";
+				case "Apr" : return "04";
+				case "May" : return "04";
+				case "Jun" : return "04";
+				case "Jul" : return "04";
+				case "Aug" : return "04";
+				case "Sep" : return "04";
+				case "Oct" : return "04";
+				case "Nov" : return "04";
+				case "Dec" : return "04";
+			}
+		}
+		function getDate(time) {
+			return time.substring(8, 10) + "/" + getMonth(time.substring(4, 7)) + "/" + time.substring(11, 15);
+		}
+		$.ajax({
+			type: 'GET',
+			url: URL,
+			success: function(res) {
+				if(res.status == "ok") {
+					appointments = res.data;
+					let newappt = [];
+					let oldappt = [];
+					appointments.forEach(function(appt) {
+						if(appt.completed)
+							oldappt.push(appt);
+						else
+							newappt.push(appt);
+					});
+					$('#new-app-cnt').append(newappt.length);
+					$('#comp-app-cnt').append(oldappt.length);
+
+					newappt.forEach(function(appt) {
+						if(appt.time !== null)
+							$('#new-app').append(`
+												<tr>
+													<td><span class="text-muted">${appt.idsitings}</span></td>
+													<td><a href="appointmentform.html?id=${appt.idsitings}">${appt.name}</a></td>
+													<td>${getDate(appt.time)}</td>
+												</tr>`);
+						else
+							$('#new-app').append(`
+												<tr>
+													<td><span class="text-muted">${appt.idsitings}</span></td>
+													<td><a href="appointmentform.html?id=${appt.idsitings}">${appt.name}</a></td>
+													<td></td>
+												</tr>`);
+					});
+					oldappt.forEach(function(appt) {
+						if(appt.time !== null)
+							$('#comp-app').append(`
+													<tr>
+														<td><span class="text-muted">${appt.idsitings}</span></td>
+														<td>${appt.name}</td>
+														<td>${getDate(appt.time)}</td>
+													</tr>`);
+						else
+							$('#comp-app').append(`
+													<tr>
+														<td><span class="text-muted">${appt.idsitings}</span></td>
+														<td>${appt.name}</td>
+														<td></td>
+													</tr>`);
+					});
+				}
+				else {
+					alert(res.message);
+					window.location.href = "/";
+				}
+			}, 
+			error: function(e) {
+				console.log(e);
+				window.location.href = "/";
+			}
+		});
+		let name = "";
+		URL = `http://178.128.111.216:1807/api/get_doctor_name?uid=${uid}`;
+		$.ajax({
+			type: 'GET',
+			url: URL,
+			success: function(res) {
+				if(res.status == "ok") {
+					name = res.name;
+					$('#doctor-name').append(name);
+				}
+				else {
+					alert(res.message);
+					window.location.href = "/";
+				}
+			}, 
+			error: function(e) {
+				console.log(e);
+				window.location.href = "/";
+			}
+		});
+		$('#href').attr('href', `../appointment-init/initialise.html?duid=${Cookies.get('uid')}`);
+
+		$("#otp-btn").click(function() {
+			if($("#warning1").length != 0)
+				$("#warning1").remove();
+			let array = $('form[name="otp-check"]').serializeArray();
+			let otp = "";
+			array.forEach(function(item) {
+				if(item.name == "otp")
+					otp = item.value;
+			})
+			let URL = 'http://178.128.111.216:1807/api/verify_appointment';
+			URL += "?id=" + id + "&otp=" + otp;
+			$.ajax({
+				type: 'GET',
+				url: URL,
+				success: function(res) {
+					if(res.status == "ok") {
+						token = res.token;
+						$("#otp-verification").remove();
+					}
+					else {
+						$("#verify").append(`
+							<div class="form-group">
+									<label class="form-label red" id="warning1">
+										${res.message}
+									</label>
+								</div>
+								`);
+					}
+				}, 
+				error: function(e) {
+					console.log(e);
+				}
+			});
+		});
+
+
+
+		let cnt = 0;
+		for(let i = 0; i < 2; i++)
+			$("#medicine-group").append(`<div class="form-group flex-disp-row">
+										<div class="col-lg-8">
+											<input class="form-control" type="text" name="medname-${cnt}" placeholder="Medicine">
+										</div>
+										<div class="col-lg-4">
+											<input class="form-control" type="text" name="medq-${cnt++}" placeholder="Quantity">
+										</div>
+									</div>`);
+		$("#addmed").click(function(){
+			$("#medicine-group").append(`<div class="form-group flex-disp-row">
+										<div class="col-lg-8">
+											<input class="form-control" type="text" name="medname-${cnt}" placeholder="Medicine">
+										</div>
+										<div class="col-lg-4">
+											<input class="form-control" type="text" name="medq-${cnt}" placeholder="Quantity">
+										</div>
+									</div>`);
+			cnt++;
+		});
+		$("#submit-btn").click(function() {
+			if($("#warning").length != 0)
+				$("#warning").remove();
+			let array = $('form[name="appointment"]').serializeArray();
+			let medicines = [];
+			let pres = {};
+
+			for(let i = 0; i < array.length; i++)
+			{
+				if(array[i].name.substr(0, 4) == "medn") {
+					medicines.push({
+						name: array[i++].value,
+						quantity: array[i].value
+					});
+				}
+				else if(array[i].name == "remarks")
+					pres.remarks = array[i].value;
+			}
+			pres.medicines = medicines;
+			let URL = 'http://178.128.111.216:1807/api/finalise_appointment';
+			URL += `?id=${id}&token=${token}&prescription=`;
+			let encoded = btoa(JSON.stringify(pres));
+			URL += encoded;
+			$.ajax({
+				type: 'GET',
+				url: URL,
+				success: function(res) {
+					if(res.status == "ok")
+						window.location.href = `summary.html?id=${id}&euid=${euid}`;
+					else
+						$("#details").append(`
+							<div class="form-group">
+									<label class="form-label red" id="warning">
+										${res.message}
+									</label>
+								</div>
+								`);
+				}, 
+				error: function(e) {
+					console.log(e);
+				}
+			});
+		});
+		let requests = [];
+		URL = `http://178.128.111.216:1807/api/get_doctor_pending_requests?euid=${euid}`;
+		$.ajax({
+			type: 'GET',
+			url: URL,
+			success: function(res) {
+				console.log(res.requests);
+				requests = res.requests;
+				if(res.status == "ok") {
+					for (let i = 0; i < requests.length; i++) {
+						if(requests[i].status == -1) {
+							$('#pen-req').append(`
+							<div class="w-100 pen-elem flex-disp-row-1 collapsible" id="ph-${i}">
+								<div class="w-1-1 inline text-muted">
+									${requests[i].idrequests}
+								</div>
+								<div class="w-2-1 inline">
+									${requests[i].name}
+								</div>
+								<div class="w-a inline">
+									${requests[i].date}
+								</div>
+							</div>
+							<div class="w-100 pen-elem content" id="pt-${i}">
+								<form class="flex-disp-row-1" id="pen-${i}">
+									<div class="col-10 inline text-muted">
+										<input type="text" id="remarks-${i}" class="w-100 plr-3 form-control" placeholder="Remarks...">
+									</div>
+									<div class="col-1 inline">
+										<button class="btn btn-primary" id="pena-${i}">Accept</button>
+									</div>
+									<div class="col-1 inline">
+										<button class="btn btn-danger" id="pend-${i}">Decline</button>
+									</div>
+								</form>
+							</div>
+							`);
+							$(`#pena-${i}`).click(function() {
+								URL = 'http://178.128.111.216:1807/api/request_response';
+								URL += `?euid=${euid}&req_id=${requests[i].idrequests}&response=1&remarks=${$(`#remarks-${i}`).val()}`;
+								$.ajax({
+									type: 'GET',
+									url: URL,
+									success: function(resp) {
+										if(resp.status == "ok") {
+											$(`#ph-${i}`).remove();
+											$(`#pt-${i}`).remove();
+										}
+										else {
+											alert("There was an error, Retry!!");
+										}
+									}, 
+									error: function(e) {
+										console.log(e);
+									}
+								});
+							});
+							$(`#pend-${i}`).click(function() {
+								URL = 'http://178.128.111.216:1807/api/request_response';
+								URL += `?euid=${euid}&req_id=${requests[i].idrequests}&response=0&remarks=${$(`#remarks-${i}`).val()}`;
+								$.ajax({
+									type: 'GET',
+									url: URL,
+									success: function(resp) {
+										if(resp.status == "ok") {
+											$(`#ph-${i}`).remove();
+											$(`#pt-${i}`).remove();
+										}
+										else {
+											alert("There was an error, Retry!!");
+										}
+									}, 
+									error: function(e) {
+										console.log(e);
+									}
+								});
+							});
+						}
+					}
+					var coll = document.getElementsByClassName("collapsible");
+					var i;
+					for (i = 0; i < coll.length; i++) {
+						coll[i].addEventListener("click", function() {
+							this.classList.toggle("active");
+							var content = this.nextElementSibling;
+							if (content.style.display === "flex") {
+								content.style.display = "none";
+							} else {
+								content.style.display = "flex";
+							}
+						});
+					}
+					$("form").submit(function(e){
+						e.preventDefault();
+					});
+				}
+			}, 
+			error: function(e) {
+				console.log(e);
+			}
+		});
+	</script>
+</body>
+</html>

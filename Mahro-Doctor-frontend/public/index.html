@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="static/css/credentials.css">
+</head>
+<body>
+	<div class="container">
+		<div class="display-flex page">
+			<div class="card" style="width: 24rem;">
+				<div class="card-body p-6">
+					<div class="card-title">Login to your account</div>
+					<form>
+						<div class="form-group">
+							<label class="form-label">UID</label>
+							<input type="text" name="uid" class="form-control UID" placeholder="Enter UID">
+						</div>
+						<div class="form-group">
+							<label class="form-label">Password</label>
+							<input type="password" name="password" class="form-control pass" placeholder="Password">
+						</div>
+						<div class="form-footer">
+							<button class="btn btn-block btn-primary login" type="submit">Login</button>
+						</div>
+					</form>	
+				</div>
+			</div>
+			<div class="margin-top"></div>
+			<div class="card" style="width: 24rem;">
+				<div class="card-body">
+					<div class="font-small">Do not have Login credentials? <a href="credentials/register.html">Sign Up.</a></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.0/js.cookie.min.js"></script>	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$(".login").click(function(ev){
+
+				ev.preventDefault();
+				var uid = $(".UID").val();
+				var pass = $(".pass").val();
+				var url = "http://178.128.111.216:1807/api/login?uid="+uid+"&password="+pass;
+				$.ajax({
+					url: url,
+					type: 'GET',
+					data: {
+						format: 'json'
+					},
+					success: function(response) {
+						var status = response.status;
+						if(status === "ok") {
+							document.cookie = "uid=" + uid;
+							document.cookie = "euid=" + response.euid;
+              if(response.is_doctor)
+                $(location).attr('href', 'doctor/dashboard.html');
+              else
+                $(location).attr('href', 'user/user.html');	
+              }
+						else {
+							alert("Incorrect credentials");
+						}
+					},
+					error: function(response) {
+						console.log(response);
+						alert(JSON.stringify(response));
+					}
+				})
+			})
+		})
+	</script>
+</body>
+</html>
