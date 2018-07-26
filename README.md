@@ -1,6 +1,6 @@
 # Mharo Doctor
 
-This is the app created by team-linters for Rajasthan Hackathon 5.0. **Website is hosted at http://178.128.111.216:9001** 
+This is the app created by team-linters for Rajasthan Hackathon 5.0. **Website is hosted at http://team-linters.ml/** 
 
 ## Links to Sites/apk
 
