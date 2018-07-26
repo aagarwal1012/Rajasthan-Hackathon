@@ -1,0 +1,26 @@
+{
+  "name": "mahro-doctor",
+  "version": "1.0.0",
+  "description": "App designed for Rajasthan Hackathon 5.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+    },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NK-Nikunj/Mahro-Doctor.git"
+  },
+  "author": "team-linters",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NK-Nikunj/Mahro-Doctor/issues"
+  },
+  "homepage": "https://github.com/NK-Nikunj/Mahro-Doctor#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
+    "mysql": "^2.16.0",
+    "sha256": "^0.2.0"
+  }
+}
