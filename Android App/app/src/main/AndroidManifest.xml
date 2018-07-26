@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="in.ayush.mharodoctor">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name="in.ayush.mharodoctor.activities.MainActivity"></activity>
+        <activity
+            android:name="in.ayush.mharodoctor.activities.LoginActivity"
+            android:theme="@style/SigninTheme"/>
+        <activity android:name="in.ayush.mharodoctor.activities.SignUpActivity" />
+        <activity
+            android:name="in.ayush.mharodoctor.activities.MakeAppointmentActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name="in.ayush.mharodoctor.activities.CurrentStatusActivity" />
+        <activity android:name="in.ayush.mharodoctor.activities.PrescriptionsActivity" />
+        <activity android:name="in.ayush.mharodoctor.activities.HistoryActivity" />
+        <activity android:name="in.ayush.mharodoctor.activities.OTPActivity" />
+        <activity android:name="in.ayush.mharodoctor.activities.ProfileActivity" />
+        <activity android:name="in.ayush.mharodoctor.activities.SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
