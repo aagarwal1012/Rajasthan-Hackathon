@@ -4,30 +4,20 @@ This is the app created by team-linters for Rajasthan Hackathon 5.0. **Website i
 
 ## Reference User/Doctor credentials
 
-User: dummy
+You may use these credentials for testing purposes.
 
-password: hello
-
-
-User: nknikunj
-
-password: hello
-
-
-User: kanav99
-
-password: 12345
-
-
-User: aagarwal
-
-password: hello
+| Username      | Password      |
+| ------------- |---------------|
+| dummy         | hello         |
+| nknikunj      | hello         |
+| kanav99       | 12345         |
+| aagarwal      | hello         |
 
 ## Links to Sites/apk
 
 We have 3 dedicated servers taking care of website and mobile backend (at http://178.128.111.216:1807), ML-backend (at http://178.128.111.216:8080) and the frontend (at http://178.128.111.216:9001).
 
-We have created an apk which can be downloaded [here][https://github.com/NK-Nikunj/Rajasthan-Hackathon/blob/master/Android%20App/apk/Mharo%20Doctor.apk].
+We have created an apk which can be downloaded [here](https://github.com/NK-Nikunj/Rajasthan-Hackathon/blob/master/Android%20App/apk/Mharo%20Doctor.apk).
 
 ## Overview
 
